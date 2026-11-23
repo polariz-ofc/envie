@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envie sua jogada | Polariz</title>
+<meta name="description" content="Mande sua jogada insana ou seu bagre histórico de LoL. As melhores entram nos vídeos do Polariz, com crédito.">
+<meta property="og:title" content="Envie sua jogada | Polariz">
+<meta property="og:description" content="Jogada insana ou bagre histórico? Manda pra cá e apareça no próximo vídeo.">
+<meta property="og:image" content="hero.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #120c2a;
+    --bg-2: #1b1440;
+    --card: #211a4d;
+    --line: #3a3170;
+    --text: #f4f2ff;
+    --muted: #a9a3cf;
+    --cyan: #1cc6d9;
+    --yellow: #f5c242;
+    --green: #3ddc97;
+    --danger: #ff6b81;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: radial-gradient(1200px 600px at 80% -10%, #2a1f66 0%, transparent 60%), var(--bg);
+    color: var(--text);
+    font: 16px/1.5 Inter, system-ui, sans-serif;
+    min-height: 100vh;
+  }
+  a { color: var(--cyan); }
+
+  .hero {
+    position: relative;
+    height: clamp(180px, 30vw, 320px);
+    background: url(hero.jpg) center 30% / cover no-repeat;
+    border-bottom: 4px solid var(--yellow);
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgba(18,12,42,.85) 100%);
+  }
+
+  main { max-width: 720px; margin: 28px auto 0; padding: 0 16px 64px; position: relative; z-index: 1; }
+
+  .intro { text-align: center; margin-bottom: 28px; }
+  .kicker {
+    display: inline-block; background: var(--cyan); color: #06222a;
+    font: 700 12px/1 Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase;
+    padding: 7px 12px; border-radius: 999px; transform: skewX(-8deg);
+  }
+  h1 {
+    font-family: "Archivo Black", Impact, sans-serif; font-weight: 400;
+    font-size: clamp(32px, 7vw, 52px); line-height: 1.05; margin: 14px 0 10px;
+    text-transform: uppercase;
+  }
+  h1 span { color: var(--yellow); }
+  .intro p { color: var(--muted); margin: 0 auto; max-width: 52ch; }
+
+  form, .done {
+    background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+    padding: clamp(18px, 4vw, 32px);
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  }
+  fieldset { border: 0; padding: 0; margin: 0 0 28px; min-width: 0; }
+  legend {
+    font-family: "Archivo Black", sans-serif; text-transform: uppercase; font-size: 15px;
+    letter-spacing: .04em; color: var(--yellow); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; width: 100%;
+  }
+  legend::after { content: ""; flex: 1; height: 2px; background: var(--line); }
+  .num {
+    display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 7px;
+    background: var(--yellow); color: #1b1440; font-size: 13px;
+  }
+
+  .grid { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+  .full { grid-column: 1 / -1; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+  label.f { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+  .req { color: var(--yellow); }
+  .hint { color: var(--muted); font-size: 12.5px; margin-top: 5px; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; color: var(--muted); border: 1px solid var(--line);
+    border-radius: 6px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px; }
+  input[type=text], input[type=email], textarea {
+    width: 100%; background: var(--bg-2); color: var(--text);
+    border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px;
+    font: inherit; outline: none; transition: border-color .15s, box-shadow .15s;
+  }
+  textarea { min-height: 96px; resize: vertical; }
+  input:focus, textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(28,198,217,.2); }
+  .invalid input[type=text], .invalid input[type=email], .invalid textarea, .invalid .cats, .invalid .drop { border-color: var(--danger) !important; }
+  .err { color: var(--danger); font-size: 12.5px; margin-top: 5px; display: none; }
+  .invalid .err { display: block; }
+
+  /* Link / arquivo */
+  .seg { display: inline-flex; background: var(--bg-2); border: 1.5px solid var(--line); border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
+  .seg button {
+    border: 0; background: transparent; color: var(--muted); font: 600 14px Inter, sans-serif;
+    padding: 9px 14px; border-radius: 9px; cursor: pointer;
+  }
+  .seg button[aria-pressed=true] { background: var(--yellow); color: #1b1440; }
+  .seg button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  .plat { font-size: 12.5px; margin-top: 6px; min-height: 18px; font-weight: 600; }
+  .plat.ok { color: var(--green); }
+  .plat.other { color: var(--muted); }
+
+  .drop {
+    display: block; border: 2px dashed var(--line); border-radius: 12px; background: var(--bg-2);
+    padding: 22px 16px; text-align: center; cursor: pointer; transition: .15s;
+  }
+  .drop:hover, .drop.over { border-color: var(--cyan); background: rgba(28,198,217,.08); }
+  .drop input { position: absolute; opacity: 0; pointer-events: none; width: 1px; }
+  .drop b { display: block; font-size: 15px; }
+  .drop small { color: var(--muted); }
+  .drop .icon { font-size: 28px; display: block; margin-bottom: 4px; }
+  .file-name { color: var(--yellow); font-weight: 600; word-break: break-all; }
+  .bar { height: 8px; border-radius: 99px; background: var(--bg); overflow: hidden; margin-top: 12px; display: none; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--cyan), var(--yellow)); transition: width .2s; }
+
+  /* Cartões de categoria */
+  .cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; border-radius: 12px; border: 1.5px solid transparent; }
+  @media (max-width: 560px) { .cats { grid-template-columns: repeat(2, 1fr); } }
+  .cat, .chip, .check { position: relative; }
+  .cat input, .chip input, .check input { position: absolute; opacity: 0; pointer-events: none; }
+  .cat span {
+    display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center;
+    padding: 14px 8px; border-radius: 12px; background: var(--bg-2); border: 1.5px solid var(--line);
+    cursor: pointer; font-weight: 600; font-size: 14px; transition: .15s;
+  }
+  .cat span b { font-size: 24px; line-height: 1; }
+  .cat span:hover { border-color: var(--muted); }
+  .cat input:checked + span { border-color: var(--yellow); background: rgba(245,194,66,.12); color: var(--yellow); }
+  .cat input:focus-visible + span, .chip input:focus-visible + span { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  /* Chips (elo, região) */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip span {
+    display: inline-block; padding: 8px 12px; border-radius: 999px; background: var(--bg-2);
+    border: 1.5px solid var(--line); font-size: 13.5px; font-weight: 600; cursor: pointer; transition: .15s;
+  }
+  .chip input:checked + span { background: var(--cyan); border-color: var(--cyan); color: #06222a; }
+
+  /* Checkboxes */
+  .check { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 10px;
+    background: var(--bg-2); border: 1.5px solid var(--line); cursor: pointer; margin-bottom: 10px; font-size: 14px; }
+  .box { flex: none; width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--muted); display: grid; place-items: center; margin-top: 1px; }
+  .check input:checked ~ .box { background: var(--yellow); border-color: var(--yellow); }
+  .check input:checked ~ .box::after { content: "✓"; color: #1b1440; font-weight: 800; font-size: 14px; }
+  .check input:focus-visible ~ .box { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  .check.invalid { border-color: var(--danger); }
+
+  button[type=submit] {
+    width: 100%; border: 0; cursor: pointer; padding: 16px 20px; border-radius: 12px;
+    background: var(--yellow); color: #1b1440;
+    font: 400 18px "Archivo Black", sans-serif; text-transform: uppercase; letter-spacing: .03em;
+    box-shadow: 0 6px 0 #b8891f; transition: transform .08s, box-shadow .08s;
+  }
+  button[type=submit]:hover { filter: brightness(1.05); }
+  button[type=submit]:active { transform: translateY(4px); box-shadow: 0 2px 0 #b8891f; }
+  button[disabled] { opacity: .6; cursor: wait; }
+  .sendErr { color: var(--danger); text-align: center; margin-top: 12px; display: none; }
+
+  .done { text-align: center; display: none; }
+  .done .big { font-size: 56px; }
+  .done h2 { font-family: "Archivo Black", sans-serif; text-transform: uppercase; margin: 8px 0; }
+  .done p { color: var(--muted); }
+  .done button { margin-top: 12px; background: transparent; color: var(--cyan); border: 1.5px solid var(--cyan); border-radius: 10px; padding: 10px 16px; font: 600 15px Inter, sans-serif; cursor: pointer; }
+
+  footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 28px; }
+  .platforms { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 8px; }
+  .platforms span { background: var(--bg-2); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; font-size: 12px; }
+</style>
+</head>
+<body>
+  <div class="hero" role="img" aria-label="Polariz"></div>
+
+  <main>
+    <section class="intro">
+      <span class="kicker">Melhores momentos do LoL BR</span>
+      <h1>Envie sua <span>jogada</span></h1>
+      <p>Fez um outplay insano ou um bagre histórico? Manda pra cá. As melhores entram nos vídeos do Polariz, sempre com crédito e link pro seu canal.</p>
+    </section>
+
+    <form id="f" novalidate>
+      <fieldset>
+        <legend><span class="num">1</span> A jogada</legend>
+        <div class="grid">
+          <div class="full field" id="clipField">
+            <div class="seg" role="group" aria-label="Como enviar o clipe">
+              <button type="button" id="modeLink" aria-pressed="true">🔗 Link do clipe</button>
+              <button type="button" id="modeFile" aria-pressed="false">📁 Eu tenho um arquivo de vídeo</button>
+            </div>
+
+            <div id="linkBox">
+              <label class="f" for="link">Link do clipe <span class="req">*</span></label>
+              <input id="link" type="text" inputmode="url" placeholder="Cole o link: Twitch, YouTube, Kick, TikTok, Medal..." autocomplete="off">
+              <div class="plat" id="plat" aria-live="polite"></div>
+              <div class="err">Cole um link válido do clipe.</div>
+            </div>
+
+            <div id="fileBox" hidden>
+              <label class="drop" id="drop">
+                <input id="file" type="file" accept="video/*">
+                <span class="icon">🎬</span>
+                <b id="dropTitle">Arraste o vídeo aqui ou clique pra escolher</b>
+                <small id="dropSub">MP4, MOV, WEBM... até 500 MB · mínimo 720p</small>
+                <div class="bar" id="bar"><i></i></div>
+              </label>
+              <div class="err" id="fileErr">Escolha um arquivo de vídeo (até 500 MB).</div>
+            </div>
+          </div>
+
+          <div class="full field" id="catField">
+            <label class="f">Categoria <span class="req">*</span></label>
+            <div class="cats" role="radiogroup" aria-label="Categoria">
+              <label class="cat"><input type="radio" name="cat" value="Jogada insana / outplay"><span><b>🔥</b>Jogada insana</span></label>
+              <label class="cat"><input type="radio" name="cat" value="Bagre / fail"><span><b>🐟</b>Bagre / fail</span></label>
+              <label class="cat"><input type="radio" name="cat" value="Engraçado"><span><b>😂</b>Engraçado</span></label>
+              <label class="cat"><input type="radio" name="cat" value="Sorte absurda"><span><b>🍀</b>Sorte absurda</span></label>
+              <label class="cat"><input type="radio" name="cat" value="Pentakill"><span><b>⚔️</b>Pentakill</span></label>
+              <label class="cat"><input type="radio" name="cat" value="Outro"><span><b>✨</b>Outro</span></label>
+            </div>
+            <div class="err">Escolha uma categoria.</div>
+          </div>
+
+          <div class="field">
+            <label class="f" for="champ">Campeão <span class="req">*</span></label>
+            <input id="champ" type="text" list="champs" placeholder="Ex.: Nilah" autocomplete="off">
+            <div class="err">Diga qual campeão.</div>
+          </div>
+          <div class="field">
+            <label class="f" for="time">Minuto da jogada</label>
+            <input id="time" type="text" placeholder="Ex.: 1:23">
+            <div class="hint">Deixe em branco se o clipe for curto.</div>
+          </div>
+
+          <div class="full field">
+            <label class="f">Região</label>
+            <div class="chips" role="radiogroup" aria-label="Região">
+              <label class="chip"><input type="radio" name="reg" value="Brasil" checked><span>🇧🇷 Brasil</span></label>
+              <label class="chip"><input type="radio" name="reg" value="LAS"><span>LAS</span></label>
+              <label class="chip"><input type="radio" name="reg" value="LAN"><span>LAN</span></label>
+              <label class="chip"><input type="radio" name="reg" value="América do Norte"><span>NA</span></label>
+              <label class="chip"><input type="radio" name="reg" value="Europa (EUW / EUNE)"><span>EUW / EUNE</span></label>
+              <label class="chip"><input type="radio" name="reg" value="Outra"><span>Outra</span></label>
+            </div>
+          </div>
+
+          <div class="full field">
+            <label class="f">Elo</label>
+            <div class="chips" role="radiogroup" aria-label="Elo">
+              <label class="chip"><input type="radio" name="elo" value="Outros"><span>Outros</span></label>
+              <label class="chip"><input type="radio" name="elo" value="Diamante"><span>Diamante</span></label>
+              <label class="chip"><input type="radio" name="elo" value="Mestre"><span>Mestre</span></label>
+              <label class="chip"><input type="radio" name="elo" value="Grão-Mestre"><span>Grão-Mestre</span></label>
+              <label class="chip"><input type="radio" name="elo" value="Challenger"><span>Challenger</span></label>
+            </div>
+          </div>
+
+          <div class="full field">
+            <label class="f" for="why">Por que essa jogada merece entrar no vídeo?</label>
+            <textarea id="why" placeholder="Conta o contexto: 1v4? último HP? Baron roubado?"></textarea>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="num">2</span> Você</legend>
+        <div class="grid">
+          <div class="field">
+            <label class="f" for="nick">Seu nome <span class="req">*</span><span class="tag">🔒 não é público</span></label>
+            <input id="nick" type="text" autocomplete="name">
+            <div class="err">Diga seu nome.</div>
+          </div>
+          <div class="field">
+            <label class="f" for="email">E-mail <span class="req">*</span><span class="tag">🔒 não é público</span></label>
+            <input id="email" type="email" placeholder="voce@email.com" autocomplete="email">
+            <div class="hint">É só pra contato.</div>
+            <div class="err">Coloque um e-mail válido.</div>
+          </div>
+          <div class="field">
+            <label class="f" for="riot">Nick / Riot ID <span class="req">*</span></label>
+            <input id="riot" type="text" placeholder="Nome#BR1">
+            <div class="hint">É o que aparece nos créditos.</div>
+            <div class="err">Como você quer aparecer nos créditos?</div>
+          </div>
+          <div class="field">
+            <label class="f" for="social">Seu canal</label>
+            <input id="social" type="text" placeholder="Twitch / YouTube / Kick / TikTok">
+            <div class="hint">Opcional. Vai na descrição do vídeo.</div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="num">3</span> Autorização</legend>
+        <label class="check" id="c1"><input type="checkbox" value="Sou o autor deste clipe (ou tenho autorização de quem gravou/transmitiu)."><span class="box"></span><span>Sou o autor deste clipe (ou tenho autorização de quem gravou/transmitiu).</span></label>
+        <label class="check" id="c2"><input type="checkbox" value="Autorizo o canal Polariz a usar, editar e publicar este clipe no YouTube e nas redes sociais, com crédito."><span class="box"></span><span>Autorizo o canal Polariz a usar, editar e publicar este clipe no YouTube e nas redes sociais, com crédito.</span></label>
+      </fieldset>
+
+      <button type="submit" id="send">Enviar jogada</button>
+      <div class="sendErr" id="sendErr"></div>
+    </form>
+
+    <section class="done" id="done" aria-live="polite">
+      <div class="big">🎮</div>
+      <h2>Jogada recebida!</h2>
+      <p>Valeu! Se ela for escolhida, você vai ver seu nick nos créditos do vídeo.</p>
+      <button type="button" id="again">Enviar outra jogada</button>
+    </section>
+
+    <footer>
+      Aceitamos clipes de
+      <div class="platforms">
+        <span>Twitch</span><span>YouTube</span><span>Kick</span><span>TikTok</span><span>Instagram</span><span>X / Twitter</span>
+        <span>Medal.tv</span><span>Outplayed</span><span>Streamable</span><span>Google Drive</span><span>Dropbox</span><span>MEGA</span><span>ou arquivo</span>
+      </div>
+      <p>Polariz · Melhores momentos do LoL</p>
+    </footer>
+  </main>
+
+  <datalist id="champs"></datalist>
+
+<script>
+  // ===== Configuração =====
+  // Google Forms que recebe as respostas (planilha "Respostas – Envie sua jogada (Polariz)")
+  const FORM = "https://docs.google.com/forms/d/e/1FAIpQLSevu5Ipfc8SxPm0DdUCsbNxju85TFIN7_5l7ScAPc3GRdgGaQ/formResponse";
+  // URL do Web App do Apps Script (termina em /exec) que salva os vídeos no seu Drive
+  const UPLOAD_URL = "https://script.google.com/macros/s/AKfycbx0FTItBK198Evo5K8J0rmrBliZMd05uCEkcTYtpJNRtrU6gO6RToHw6PHfARQ3jjo/exec";
+  const E = {
+    nick: "entry.428135762", email: "entry.882067546", social: "entry.2104644193",
+    link: "entry.452870684", time: "entry.1636727636", cat: "entry.669093777",
+    champ: "entry.1629068672", elo: "entry.746740191", riot: "entry.1618372862",
+    why: "entry.2079730104", confirm: "entry.1817512256",
+    reg: "entry.928604456"
+  };
+  const MAX_BYTES = 500 * 1024 * 1024;
+  const CHUNK = 8 * 1024 * 1024; // múltiplo de 256 KB (exigência do Google Drive)
+
+  // ===== Plataformas reconhecidas =====
+  const PLATFORMS = [
+    [/(^|\.)twitch\.tv$/, "Twitch"], [/(^|\.)(youtube\.com|youtu\.be)$/, "YouTube"],
+    [/(^|\.)kick\.com$/, "Kick"], [/(^|\.)tiktok\.com$/, "TikTok"], [/(^|\.)instagram\.com$/, "Instagram"],
+    [/(^|\.)(x\.com|twitter\.com)$/, "X / Twitter"], [/(^|\.)medal\.tv$/, "Medal.tv"],
+    [/(^|\.)outplayed\.tv$/, "Outplayed"], [/(^|\.)streamable\.com$/, "Streamable"],
+    [/(^|\.)(drive|docs)\.google\.com$/, "Google Drive"], [/(^|\.)dropbox\.com$/, "Dropbox"],
+    [/(^|\.)mega\.(nz|io)$/, "MEGA"], [/(^|\.)(facebook\.com|fb\.watch)$/, "Facebook"],
+    [/(^|\.)allstar\.gg$/, "Allstar"], [/(^|\.)hideout\.gg$/, "Hideout"], [/(^|\.)gyazo\.com$/, "Gyazo"],
+    [/(^|\.)(onedrive\.live\.com|1drv\.ms)$/, "OneDrive"], [/(^|\.)wetransfer\.com$|^we\.tl$/, "WeTransfer"],
+    [/(^|\.)trovo\.live$/, "Trovo"], [/(^|\.)(huya|douyu|bilibili)\.com$/, "Stream asiático"],
+  ];
+
+  const CHAMPS = "Aatrox Ahri Akali Akshan Alistar Ambessa Amumu Anivia Annie Aphelios Ashe Aurelion_Sol Aurora Azir Bard Bel'Veth Blitzcrank Brand Braum Briar Caitlyn Camille Cassiopeia Cho'Gath Corki Darius Diana Dr._Mundo Draven Ekko Elise Evelynn Ezreal Fiddlesticks Fiora Fizz Galio Gangplank Garen Gnar Gragas Graves Gwen Hecarim Heimerdinger Hwei Illaoi Irelia Ivern Janna Jarvan_IV Jax Jayce Jhin Jinx K'Sante Kai'Sa Kalista Karma Karthus Kassadin Katarina Kayle Kayn Kennen Kha'Zix Kindred Kled Kog'Maw LeBlanc Lee_Sin Leona Lillia Lissandra Lucian Lulu Lux Malphite Malzahar Maokai Master_Yi Mel Milio Miss_Fortune Mordekaiser Morgana Naafiri Nami Nasus Nautilus Neeko Nidalee Nilah Nocturne Nunu_&_Willump Olaf Orianna Ornn Pantheon Poppy Pyke Qiyana Quinn Rakan Rammus Rek'Sai Rell Renata_Glasc Renekton Rengar Riven Rumble Ryze Samira Sejuani Senna Seraphine Sett Shaco Shen Shyvana Singed Sion Sivir Skarner Smolder Sona Soraka Swain Sylas Syndra Tahm_Kench Taliyah Talon Taric Teemo Thresh Tristana Trundle Tryndamere Twisted_Fate Twitch Udyr Urgot Varus Vayne Veigar Vel'Koz Vex Vi Viego Viktor Vladimir Volibear Warwick Wukong Xayah Xerath Xin_Zhao Yasuo Yone Yorick Yunara Yuumi Zac Zed Zeri Ziggs Zilean Zoe Zyra".split(" ");
+  document.getElementById("champs").innerHTML = CHAMPS.map(c => `<option value="${c.replace(/_/g, " ")}">`).join("");
+
+  const $ = id => document.getElementById(id);
+  const form = $("f");
+  const val = id => $(id).value.trim();
+  const radio = name => (form.querySelector(`input[name=${name}]:checked`) || {}).value || "";
+  let mode = "link";
+  let file = null;
+
+  // ===== Link: normaliza e reconhece a plataforma =====
+  function normUrl(s) {
+    s = s.trim();
+    if (!s) return "";
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+    try { const u = new URL(s); return /\.[a-z]{2,}$/i.test(u.hostname) ? u.href : ""; } catch { return ""; }
+  }
+  function platformOf(url) {
+    const host = new URL(url).hostname.replace(/^www\.|^m\./, "");
+    const hit = PLATFORMS.find(([re]) => re.test(host));
+    return hit ? hit[1] : null;
+  }
+  $("link").addEventListener("input", () => {
+    const url = normUrl(val("link")), p = $("plat");
+    if (!url) { p.textContent = ""; p.className = "plat"; return; }
+    const name = platformOf(url);
+    p.textContent = name ? `✓ ${name}` : "Link aceito, vamos conferir manualmente.";
+    p.className = "plat " + (name ? "ok" : "other");
+  });
+
+  // ===== Alterna link / arquivo =====
+  function setMode(m) {
+    mode = m;
+    $("modeLink").setAttribute("aria-pressed", m === "link");
+    $("modeFile").setAttribute("aria-pressed", m === "file");
+    $("linkBox").hidden = m !== "link";
+    $("fileBox").hidden = m !== "file";
+    $("clipField").classList.remove("invalid");
+  }
+  $("modeLink").onclick = () => setMode("link");
+  $("modeFile").onclick = () => setMode("file");
+
+  // ===== Arquivo =====
+  const fmtMB = b => (b / 1024 / 1024).toFixed(1).replace(".", ",") + " MB";
+  function pickFile(f) {
+    file = null;
+    $("clipField").classList.remove("invalid");
+    if (!f) return;
+    if (!f.type.startsWith("video/")) { $("fileErr").textContent = "Esse arquivo não é um vídeo."; $("clipField").classList.add("invalid"); return; }
+    if (f.size > MAX_BYTES) { $("fileErr").textContent = `O vídeo tem ${fmtMB(f.size)}. O máximo é 500 MB. Corte o clipe ou mande um link.`; $("clipField").classList.add("invalid"); return; }
+    file = f;
+    $("dropTitle").innerHTML = `<span class="file-name"></span>`;
+    $("dropTitle").firstChild.textContent = f.name;
+    $("dropSub").textContent = `${fmtMB(f.size)} · clique pra trocar`;
+  }
+  $("file").addEventListener("change", e => pickFile(e.target.files[0]));
+  const drop = $("drop");
+  ["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", e => pickFile(e.dataTransfer.files[0]));
+
+  async function callUpload(body) {
+    const r = await fetch(UPLOAD_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) });
+    const j = await r.json();
+    if (j.error) throw new Error(j.error);
+    return j;
+  }
+  function toB64(blob) {
+    return new Promise((ok, fail) => {
+      const rd = new FileReader();
+      rd.onload = () => ok(rd.result.split(",")[1]);
+      rd.onerror = fail;
+      rd.readAsDataURL(blob);
+    });
+  }
+  async function uploadFile(f, onProgress) {
+    const { id } = await callUpload({ action: "init", name: f.name, mimeType: f.type, size: f.size });
+    let start = 0;
+    while (true) {
+      const data = await toB64(f.slice(start, start + CHUNK));
+      let res, tries = 0;
+      while (true) {
+        try { res = await callUpload({ action: "chunk", id, start, data }); break; }
+        catch (err) { if (++tries >= 3) throw err; await new Promise(r => setTimeout(r, 1500 * tries)); }
+      }
+      if (res.done) { onProgress(1); return res.url; }
+      start = res.next;
+      onProgress(start / f.size);
+    }
+  }
+
+  // ===== Validação =====
+  function validate() {
+    let ok = true, first = null;
+    const check = (el, bad) => { el.classList.toggle("invalid", bad); if (bad) { ok = false; first = first || el; } };
+    if (mode === "link") check($("clipField"), !normUrl(val("link")));
+    else { if (!file) $("fileErr").textContent = "Escolha um arquivo de vídeo (até 500 MB)."; check($("clipField"), !file); }
+    check($("catField"), !radio("cat"));
+    check($("champ").closest(".field"), !val("champ"));
+    check($("nick").closest(".field"), !val("nick"));
+    check($("email").closest(".field"), !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val("email")));
+    check($("riot").closest(".field"), !val("riot"));
+    check($("c1"), !$("c1").querySelector("input").checked);
+    check($("c2"), !$("c2").querySelector("input").checked);
+    if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
+    return ok;
+  }
+  ["input", "change"].forEach(ev => form.addEventListener(ev, e => {
+    const f = e.target.closest(".field, .check"); if (f && e.target.id !== "file") f.classList.remove("invalid");
+  }));
+
+  // ===== Envio =====
+  function showErr(msg) { const el = $("sendErr"); el.textContent = msg; el.style.display = "block"; }
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    $("sendErr").style.display = "none";
+    if (!validate()) return;
+
+    const btn = $("send");
+    btn.disabled = true;
+    let clipUrl = normUrl(val("link"));
+    try {
+      if (mode === "file") {
+        if (!UPLOAD_URL) throw new Error("O envio de arquivo ainda não está ativo. Mande um link por enquanto.");
+        $("bar").style.display = "block";
+        clipUrl = await uploadFile(file, p => {
+          $("bar").firstElementChild.style.width = Math.round(p * 100) + "%";
+          btn.textContent = `Enviando vídeo... ${Math.round(p * 100)}%`;
+        });
+      }
+      btn.textContent = "Enviando...";
+
+      const data = new URLSearchParams();
+      const put = (k, v) => { if (v && E[k]) data.append(E[k], v); };
+      put("nick", val("nick")); put("email", val("email")); put("social", val("social"));
+      put("link", clipUrl); put("time", val("time")); put("cat", radio("cat"));
+      put("champ", val("champ")); put("elo", radio("elo")); put("reg", radio("reg"));
+      put("riot", val("riot")); put("why", val("why"));
+      form.querySelectorAll(".check input:checked").forEach(c => data.append(E.confirm, c.value));
+
+      // O Google não deixa ler a resposta (no-cors); se a requisição saiu, a resposta foi gravada.
+      await fetch(FORM, { method: "POST", mode: "no-cors", body: data });
+      form.style.display = "none";
+      $("done").style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      showErr(mode === "file"
+        ? `Não deu pra enviar o vídeo: ${err.message} Tente de novo ou mande um link.`
+        : "Não deu pra enviar agora. Confira sua conexão e tente de novo.");
+    } finally {
+      btn.disabled = false; btn.textContent = "Enviar jogada";
+      $("bar").style.display = "none"; $("bar").firstElementChild.style.width = "0";
+    }
+  });
+
+  $("again").addEventListener("click", () => {
+    form.reset(); file = null; setMode("link");
+    $("dropTitle").textContent = "Arraste o vídeo aqui ou clique pra escolher";
+    $("dropSub").textContent = "MP4, MOV, WEBM... até 500 MB · mínimo 720p";
+    $("plat").textContent = "";
+    form.querySelectorAll(".invalid").forEach(x => x.classList.remove("invalid"));
+    $("done").style.display = "none";
+    form.style.display = "block";
+  });
+</script>
+</body>
+</html>
